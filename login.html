@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoLoc Pro - Gestion de Location</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="toast-container"></div>
+<div id="auth-screen">
+    <div class="login-card">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <i class="fas fa-car-side" style="font-size: 3rem; color: var(--primary);"></i>
+            <h2 style="margin-top: 1rem; font-size: 1.5rem;" data-i18n="appName">AutoLoc Pro</h2>
+            <p class="text-muted" data-i18n="loginSubtitle">Connectez-vous à votre compte</p>
+        </div>
+        <form id="login-form">
+            <div class="form-group">
+                <label data-i18n="email">Email</label>
+                <input type="email" id="email" class="form-control" value="admin@app.com" required>
+            </div>
+            <div class="form-group">
+                <label data-i18n="password">Mot de passe</label>
+                <input type="password" id="password" class="form-control" value="admin123" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;" data-i18n="loginBtn">Connexion</button>
+            <div style="margin-top: 1.5rem; font-size: 0.8rem; text-align: center; color: var(--text-muted); background: #f8fafc; padding: 10px; border-radius: 6px;">
+                <div>Admin: admin@app.com / admin123</div>
+                <div>User: user@app.com / user123</div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="app-layout" class="hidden">
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-car-side"></i> <span data-i18n="appName">AutoLoc Pro</span>
+        </div>
+
+        <nav class="nav-menu" id="nav-links"></nav>
+
+        <div class="user-profile">
+            <div class="avatar" id="user-avatar">AD</div>
+            <div class="user-info-text">
+                <div id="nav-username">Admin User</div>
+                <div onclick="App.logout()" style="color: #94a3b8; cursor: pointer; font-size: 0.8rem;">
+                    <i class="fas fa-sign-out-alt"></i> <span data-i18n="logout">Déconnexion</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div id="main-wrapper">
+        <header>
+            <div class="flex items-center gap-4">
+                <i class="fas fa-bars mobile-toggle" onclick="App.toggleSidebar()"></i>
+                <h3 id="page-title">Tableau de bord</h3>
+            </div>
+            <div class="flex items-center gap-4">
+                <select id="lang-selector" class="form-control" style="width: auto; padding: 6px 12px;" onchange="App.setLanguage(this.value)">
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+        </header>
+
+        <main id="content-area"></main>
+    </div>
+</div>
+
+<div id="modal-overlay" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="modal-title" style="font-size: 1.25rem;">Title</h3>
+            <button onclick="App.closeModal()" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--text-muted);">&times;</button>
+        </div>
+        <div class="modal-body" id="modal-body"></div>
+        <div class="modal-footer" id="modal-footer"></div>
+    </div>
+</div>
+<script type="module" src="js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soutenance Finale - AutoLoc Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb; 
+            --secondary: #475569;
+            --bg-body: #f8fafc;
+            --text-main: #1e293b;
+            --accent: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+        body { overflow: hidden; background-color: var(--bg-body); color: var(--text-main); }
+
+        .slider-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            overflow-x: scroll;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+        }
+        .slider-container::-webkit-scrollbar { display: none; }
+
+        section.slide {
+            flex: 0 0 100vw;
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            background: white;
+        }
+
+        /* Styles specific for diagrams */
+        section.diagram-slide { padding: 1rem; justify-content: flex-start; }
+        section.diagram-slide h2 { margin-top: 1rem; margin-bottom: 1rem; }
+        .img-container-full {
+            flex: 1; width: 100%; display: flex; align-items: center; justify-content: center;
+            overflow: hidden; padding: 10px; border: 2px dashed #e2e8f0; border-radius: 8px; background: #fdfdfd;
+        }
+        .img-container-full img { width: 100%; height: 100%; object-fit: contain; max-height: 80vh; }
+
+        /* Divider Slides */
+        section.part-header { background: var(--primary); color: white; }
+        section.part-header h1 { color: white; margin-bottom: 1rem; }
+        
+        h1 { font-size: 3rem; color: var(--primary); margin-bottom: 0.5rem; text-align: center; }
+        h2 { font-size: 2.2rem; color: var(--secondary); margin-bottom: 2rem; position: relative; }
+        h2::after { content: ''; display: block; width: 50px; height: 4px; background: var(--primary); margin-top: 10px; }
+
+        .part-label {
+            position: absolute; top: 2rem; left: 2rem;
+            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; font-weight: bold;
+        }
+
+        /* Content Layouts */
+        .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; width: 100%; max-width: 1200px; align-items: center; }
+        
+        .card {
+            background: #f8fafc; padding: 2rem; border-radius: 12px; border-left: 4px solid var(--primary);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); height: 100%;
+        }
+
+        .code-block {
+            background: #1e293b; color: #a5b4fc; padding: 1.5rem; border-radius: 8px;
+            font-family: 'Consolas', monospace; font-size: 0.9rem; overflow-x: auto;
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Navigation */
+        .controls { position: fixed; bottom: 2rem; right: 2rem; display: flex; gap: 1rem; z-index: 100; }
+        .btn-nav {
+            background: var(--primary); color: white; border: none; width: 50px; height: 50px; 
+            border-radius: 50%; cursor: pointer; font-size: 1.2rem; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-nav:hover { transform: scale(1.1); background: #1d4ed8; }
+        .progress-bar { position: fixed; bottom: 0; left: 0; height: 6px; background: var(--primary); width: 0%; transition: width 0.3s; z-index: 200; }
+        
+        .page-number { position: absolute; bottom: 2rem; left: 2rem; color: #cbd5e1; font-weight: bold; }
+
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="controls">
+        <button class="btn-nav" onclick="prevSlide()"><i class="fas fa-arrow-left"></i></button>
+        <button class="btn-nav" onclick="nextSlide()"><i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <div class="slider-container" id="slider">
+        
+        <section class="slide">
+            <i class="fas fa-car-side" style="font-size: 5rem; color: var(--primary); margin-bottom: 1rem;"></i>
+            <h1>AutoLoc Pro</h1>
+            <h3 style="color: var(--secondary);">Backoffice de Gestion de Location</h3>
+            <p style="margin-top: 1rem; color: #64748b;">Mini-Projet Web - JavaScript Vanilla</p>
+            <div class="page-number">1 / 13</div>
+        </section>
+
+        <section class="slide part-header">
+            <i class="fas fa-flag-checkered" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+            <h1>1. Contexte & Objectifs</h1>
+            <div class="page-number">2 / 13</div>
+        </section>
+
+        <section class="slide">
+            <div class="part-label">1. Contexte</div>
+            <h2>Périmètre du Projet</h2>
+            <div class="content-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-exclamation-triangle"></i> Contraintes</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>• <strong>No Frameworks:</strong> Interdiction d'utiliser React, Angular ou Vue.</li>
+                        <li>• <strong>Vanilla JS:</strong> Manipulation directe du DOM.</li>
+                        <li>• <strong>Données:</strong> Simulation BDD via JSON/LocalStorage.</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left-color: var(--accent);">
+                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-bullseye"></i> Objectifs</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>• <strong>CRUD Complet:</strong> 5 Entités (Clients, Voitures, etc.).</li>
+                        <li>• <strong>Dashboard:</strong> KPIs et Graphiques dynamiques.</li>
+                        <li>• <strong>UX:</strong> Design Responsive & Internationalisation.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="page-number">3 / 13</div>
+        </section>
+
+        <section class="slide part-header">
+            <i class="fas fa-cogs" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+            <h1>2. Analyse & Conception</h1>
+            <div class="page-number">4 / 13</div>
+        </section>
+
+        <section class="slide diagram-slide">
+            <div class="part-label">2. Analyse</div>
+            <h2>Diagramme de Cas d'Utilisation</h2>
+            <div class="img-container-full">
+                <img src="usecase.png" alt="Use Case Diagram" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none; text-align:center;">Image manquante: usecase.png</div>
+            </div>
+            <div class="page-number">5 / 13</div>
+        </section>
+
+        <section class="slide diagram-slide">
+            <div class="part-label">2. Analyse</div>
+            <h2>Diagramme de Séquence</h2>
+            <div class="img-container-full">
+                <img src="sequence.png" alt="Sequence Diagram" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none; text-align:center;">Image manquante: sequence.png</div>
+            </div>
+            <div class="page-number">6 / 13</div>
+        </section>
+
+        <section class="slide diagram-slide">
+            <div class="part-label">2. Analyse</div>
+            <h2>Diagramme de Classe</h2>
+            <div class="img-container-full">
+                <img src="class.png" alt="Class Diagram" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none; text-align:center;">Image manquante: class_diagram.png</div>
+            </div>
+            <div class="page-number">7 / 13</div>
+        </section>
+
+        <section class="slide">
+            <div class="part-label">2. Analyse</div>
+            <h2>Structure des Données JSON</h2>
+            <p style="margin-bottom: 2rem;">Modélisation NoSQL simulée pour le LocalStorage</p>
+            <div class="content-grid">
+                <div>
+                    <h3 style="color: var(--primary); margin-bottom: 1rem;">Entité Voiture</h3>
+                    <ul style="line-height: 1.8;">
+                        <li><strong>ID :</strong> Identifiant unique (Timestamp ou UUID).</li>
+                        <li><strong>État :</strong> Gestion via Enum <code>['DISPO', 'LOUE']</code>.</li>
+                        <li><strong>Prix :</strong> Base de calcul pour la facturation.</li>
+                    </ul>
+                </div>
+                <div class="code-block">
+{
+  "voitures": [
+    {
+      "id": 101,
+      "modele": "Clio 5",
+      "marque": "Renault",
+      "prix_jour": 45,
+      "etat": "DISPO",
+      "image": "assets/clio.jpg"
+    }
+  ],
+  "locations": []
+}
+                </div>
+            </div>
+            <div class="page-number">8 / 13</div>
+        </section>
+
+        <section class="slide part-header">
+            <i class="fas fa-laptop-code" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+            <h1>3. Réalisation Technique</h1>
+            <div class="page-number">9 / 13</div>
+        </section>
+
+        <section class="slide">
+            <div class="part-label">3. Réalisation</div>
+            <h2>Environnement Technique</h2>
+            <div class="content-grid">
+                <div class="card">
+                    <h3><i class="fab fa-js" style="color:#f7df1e;"></i> Core Logic</h3>
+                    <p style="margin-top:10px;">Architecture basée sur des Modules ES6 pour séparer la vue (DOM) de la logique métier (Services).</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-swatchbook" style="color:#ec4899;"></i> UI / UX</h3>
+                    <p style="margin-top:10px;">Utilisation de variables CSS (<code>:root</code>) pour une maintenance facile du thème (Couleurs, Spacing).</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-box-open" style="color:#3b82f6;"></i> Libs Externes</h3>
+                    <p style="margin-top:10px;"><strong>Chart.js</strong> pour la dataviz et <strong>jsPDF</strong> pour la génération administrative.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-globe" style="color:#10b981;"></i> i18n</h3>
+                    <p style="margin-top:10px;">Système de dictionnaire JSON pour le changement de langue dynamique (FR/EN/AR).</p>
+                </div>
+            </div>
+            <div class="page-number">10 / 13</div>
+        </section>
+
+        <section class="slide">
+            <div class="part-label">3. Réalisation</div>
+            <h2>Design System (CSS)</h2>
+            <div class="content-grid">
+                <div class="code-block" style="font-size: 0.8rem;">
+/* style.css */
+:root {
+    --primary: #2563eb;
+    --bg-body: #f1f5f9;
+    --sidebar-width: 260px;
+    --radius: 8px;
+}
+
+.card {
+    background: white;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    border-radius: var(--radius);
+}
+                </div>
+                <div>
+                    <h3>Cohérence Visuelle</h3>
+                    <p>Le design repose sur une palette de couleurs stricte définie dans <code>style.css</code>.</p>
+                    <br>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 10px;"><span style="display:inline-block; width:20px; height:20px; background:#2563eb; vertical-align:middle; margin-right:10px;"></span><strong>Primary:</strong> Actions principales.</li>
+                        <li style="margin-bottom: 10px;"><span style="display:inline-block; width:20px; height:20px; background:#10b981; vertical-align:middle; margin-right:10px;"></span><strong>Success:</strong> Validation / Dispo.</li>
+                        <li><span style="display:inline-block; width:20px; height:20px; background:#ef4444; vertical-align:middle; margin-right:10px;"></span><strong>Danger:</strong> Suppression / Erreur.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="page-number">11 / 13</div>
+        </section>
+
+        <section class="slide">
+            <div class="part-label">3. Réalisation</div>
+            <h2>Algorithme de Recherche</h2>
+            <p style="margin-bottom: 2rem;">Implémentation de filtres dynamiques côté client.</p>
+            <div class="code-block" style="width: 80%; max-width: 900px;">
+// Fonction de filtrage en temps réel
+function filterTable(searchTerm) {
+    const rows = document.querySelectorAll('tbody tr');
+    
+    rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        // Afficher uniquement si le terme est trouvé
+        if (text.includes(searchTerm.toLowerCase())) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+            </div>
+            <div style="margin-top: 2rem; display: flex; gap: 2rem;">
+                <div style="background:#eef2ff; padding: 10px 20px; border-radius: 20px; color: var(--primary);">
+                    <i class="fas fa-bolt"></i> Performance instantanée
+                </div>
+                <div style="background:#eef2ff; padding: 10px 20px; border-radius: 20px; color: var(--primary);">
+                    <i class="fas fa-server"></i> Pas d'appel serveur
+                </div>
+            </div>
+            <div class="page-number">12 / 13</div>
+        </section>
+
+        <section class="slide">
+            <i class="fas fa-award" style="font-size: 5rem; color: #f59e0b; margin-bottom: 1rem;"></i>
+            <h1>Conclusion & Perspectives</h1>
+            <div class="content-grid" style="margin-top: 3rem;">
+                <div style="text-align: center;">
+                    <h3 style="color: #10b981;">Acquis</h3>
+                    <p style="color: #64748b; margin-top: 10px;">Maîtrise du DOM<br>Logique Asynchrone<br>Architecture MVC</p>
+                </div>
+                <div style="text-align: center; border-left: 1px solid #e2e8f0;">
+                    <h3 style="color: var(--primary);">Améliorations Futures</h3>
+                    <p style="color: #64748b; margin-top: 10px;">Backend réel (Node/PHP)<br>Paiement en ligne (Stripe)<br>Application Mobile</p>
+                </div>
+            </div>
+            <h3 style="margin-top: 4rem;">Merci de votre attention</h3>
+            <div class="page-number">13 / 13</div>
+        </section>
+
+    </div>
+
+    <script>
+        const slider = document.getElementById('slider');
+        const progressBar = document.getElementById('progressBar');
+
+        slider.addEventListener('scroll', () => {
+            const scrollLeft = slider.scrollLeft;
+            const scrollWidth = slider.scrollWidth - slider.clientWidth;
+            const progress = (scrollLeft / scrollWidth) * 100;
+            progressBar.style.width = `${progress}%`;
+        });
+
+        function nextSlide() { slider.scrollBy({ left: window.innerWidth, behavior: 'smooth' }); }
+        function prevSlide() { slider.scrollBy({ left: -window.innerWidth, behavior: 'smooth' }); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+    </script>
+</body>
+</html>
